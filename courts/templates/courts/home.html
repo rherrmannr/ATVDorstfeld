@@ -3,9 +3,10 @@
 {% for court in courts %}
 <h1>{{ court.title }}</h1>
 <article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
     <div class="media-body">
-        <p class="article-content">{{ court.title }}</p>
+        {% for reservation in reservations %}
+        <p class="article-content">{{ reservation.author }}: {{reservation.start_datetime|date:"F d, Y"}} bis {{reservation.end_datetime|date:"F d, Y"}}</p>
+        {% endfor %}
     </div>
 </article>
 {% endfor %}

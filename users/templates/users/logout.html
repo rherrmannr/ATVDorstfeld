@@ -1,0 +1,9 @@
+{% extends "courts/base.html" %}
+{% block content %}
+<h2>Erfolgreich Ausgeloggt!</h2>
+<div class="border-top pt-3">
+    <small class="text-muted">
+        <a href="{% url 'login' %}">Erneut Einloggen</a>
+    </small>
+</div>
+{% endblock content %}
