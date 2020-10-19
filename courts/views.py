@@ -1,13 +1,15 @@
-from django.db.models.fields import DateTimeCheckMixin
-from django.views.generic import ListView, CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+import datetime
+
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.views.generic import ListView
+
+from courts.forms import ReservationCreateView
 from courts.model import Court, Reservation
-from django.db import models
 
 
 class CourtsListView(ListView):
     model = Court
-    # model = Post -> wird zu court
     template_name = 'courts/home.html'
     context_object_name = 'courts'
 
@@ -20,13 +22,13 @@ class CourtsListView(ListView):
         return context
 
 
-class ReservationCreateView(LoginRequiredMixin, CreateView):
-    model = Reservation
-    fields = ['court', 'start_datetime']
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
-    class Meta:
-        model = Reservation
+def reserve(request):
+    form = ReservationCreateView(request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.instance.author = request.user
+            form.instance.end_datetime = form.instance.start_datetime + datetime.timedelta(hours=1)
+            messages.success(request, f'Buchung wurde angelegt. Viel Spaß beim Spielen!')
+            form.save()
+            return redirect('courts-home')
+    return render(request, 'courts/reservation_form.html', {'form': form})

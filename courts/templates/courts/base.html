@@ -34,7 +34,7 @@
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
-                    <a class="nav-item nav-link" href="#">Buchen</a>
+                    <a class="nav-item nav-link" href="{% url 'reservation-create' %}">Buchen</a>
                     <a class="nav-item nav-link" href="#">Meine Buchungen</a>
                     <a class="nav-item nav-link" href="{% url 'logout' %}">Ausloggen</a>
                     {% else %}
