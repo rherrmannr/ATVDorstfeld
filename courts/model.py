@@ -9,6 +9,7 @@ class Court(models.Model):
     title = models.CharField(max_length=100)
     used = models.BooleanField(default=False)
     double_field = models.BooleanField(default=True)
+    full_hour = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
@@ -22,6 +23,3 @@ class Reservation(models.Model):
 
     def __str__(self):
         return str(self.author) if self.author else ''
-
-    def get_absolute_url(self):
-        return reverse('courts-home')
