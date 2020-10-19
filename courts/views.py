@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from django.views.generic import ListView
-
+from django.db.models.fields import DateTimeCheckMixin
+from django.views.generic import ListView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from courts.model import Court, Reservation
+from django.db import models
 
 
 class CourtsListView(ListView):
@@ -17,3 +18,15 @@ class CourtsListView(ListView):
             'reservations': Reservation.objects.all(),
         })
         return context
+
+
+class ReservationCreateView(LoginRequiredMixin, CreateView):
+    model = Reservation
+    fields = ['court', 'start_datetime']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    class Meta:
+        model = Reservation
