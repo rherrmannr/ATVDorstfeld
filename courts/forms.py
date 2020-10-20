@@ -1,30 +1,34 @@
-import datetime
+from datetime import datetime, timedelta
 
-from django.forms import DateTimeField, DurationField, CharField
-from django.forms.utils import ErrorList
-from django.views.generic import CreateView
 from django import forms
 
 from courts.model import Reservation
 
-HOUR_CHOICES = [(datetime.time(hour=x), '{:02d}:00'.format(x)) for x in range(6, 22)]
 
-MY_CHOICES = [
-    (datetime.datetime(year=2020, month=10, day=20, hour=8), '2020-10-20 8:00'),
-    (datetime.datetime(year=2020, month=10, day=20, hour=9), '2020-10-20 9:00'),
-]
+def get_all_choices(future_days=14):
+    current = datetime.now()
+    all_choices = [
+        (datetime(year=current.year, month=current.month, day=current.day, hour=x),
+         '{}-{}-{} {:02d}:00'.format(current.year, current.month, current.day, x)) for x in
+        range(current.hour + 1, 22)
+    ]
 
-MY_CHOICES2 = [
-    (datetime.datetime(year=2020, month=10, day=20, hour=8), '2020-10-20 10:00'),
-    (datetime.datetime(year=2020, month=10, day=20, hour=9), '2020-10-20 11:00'),
-]
+    for x in range(1, future_days):
+        current = current + timedelta(days=1)
+        all_choices.extend([
+            (datetime(year=current.year, month=current.month, day=current.day, hour=x),
+             '{}-{}-{} {:02d}:00'.format(current.year, current.month, current.day, x)) for x in
+            range(6, 21)
+        ])
+    return all_choices
 
 
 class ReservationCreateView(forms.ModelForm):
     class Meta:
         model = Reservation
         fields = ['court', 'start_datetime']
-        widgets = {'start_datetime': forms.Select(choices=MY_CHOICES)}
+        choices = get_all_choices()
+        widgets = {'start_datetime': forms.Select(choices=choices)}
 
 
 class CourtSelectionView(forms.ModelForm):
@@ -33,15 +37,28 @@ class CourtSelectionView(forms.ModelForm):
         fields = ['court']
 
 
+def get_available_times_for_court(court_id, days_in_future=14):
+    all_choices = get_all_choices(days_in_future)
+    reservations = Reservation.objects.filter(court_id=court_id)
+    remove_list = []
+    for r in reservations:
+        year = r.start_datetime.year
+        month = r.start_datetime.month
+        day = r.start_datetime.day
+        hour = r.start_datetime.hour
+        remove_list.extend([
+            (datetime(year=year, month=month, day=day, hour=r.start_datetime.hour),
+             '{}-{}-{} {:02d}:00'.format(year, month, day, hour))
+        ])
+    return filter(lambda i: i not in remove_list, all_choices)
+
+
 def get_date_time_selection_view_class(court):
     class DatetimeSelectionView(forms.ModelForm):
-        class Meta(object):
-            print(court)
+        class Meta:
             model = Reservation
             fields = ['start_datetime']
-            if court == 1:
-                widgets = {'start_datetime': forms.Select(choices=MY_CHOICES)}
-            if court == 2:
-                widgets = {'start_datetime': forms.Select(choices=MY_CHOICES2)}
+            choices = get_available_times_for_court(court)
+            widgets = {'start_datetime': forms.Select(choices=choices)}
 
     return DatetimeSelectionView
