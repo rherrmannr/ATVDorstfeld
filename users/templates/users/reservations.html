@@ -4,8 +4,67 @@
 {% for reservation in reservations %}
 <article class="media content-section">
     <div class="media-body">
+        <h3><a class="article-title">{{ post.title }}{{reservation.start_datetime|date:"F d, Y"}}
+            {{reservation.start_datetime|date:"H:i"}} bis {{reservation.end_datetime|date:"H:i"}} Uhr</a></h3>
+
         <div class="article-metadata">
-            <small class="text-muted">{{reservation.start_datetime|date:"F d, Y H:i"}} bis {{reservation.end_datetime|date:"H:i"}}</small>
+            <div>
+
+                <!--                <table class="table">-->
+                <!--                    <thead>-->
+                <!--                    <tr>-->
+                <!--                        <th scope="col">#</th>-->
+                <!--                        <th scope="col">Datum</th>-->
+                <!--                        <th scope="col">Start</th>-->
+                <!--                        <th scope="col">Ende</th>-->
+                <!--                    </tr>-->
+                <!--                    </thead>-->
+                <!--                    <tbody>-->
+                <!--                    <tr>-->
+                <!--                        <th scope="row">1</th>-->
+                <!--                        <td>{{reservation.start_datetime|date:"F d, Y"}}</td>-->
+                <!--                        <td>{{reservation.start_datetime|date:"H:i"}}</td>-->
+                <!--                        <td>{{reservation.end_datetime|date:"H:i"}}</td>-->
+                <!--                    </tr>-->
+                <!--                    </tbody>-->
+                <!--                </table>-->
+                <p class="article-content">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Vorname</th>
+                        <th scope="col">Nachname</th>
+                        <th scope="col">Benutzername</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Robin</td>
+                        <td>Herrmann</td>
+                        <td>rherrmann</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Alexander</td>
+                        <td>Lenz</td>
+                        <td>alex</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Irgend</td>
+                        <td>Jemand</td>
+                        <td>Gastspieler</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </p>
+            </div>
+            <div>
+                <a class="btn btn-secondary btn-sm mt-3 mb-1" href="#">Update</a>
+                <a class="btn btn-danger btn-sm mt-3 mb-1 float-right" href="#">Delete</a>
+            </div>
         </div>
     </div>
 </article>
