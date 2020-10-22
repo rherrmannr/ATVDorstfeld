@@ -36,7 +36,7 @@
                     {% if user.is_authenticated %}
                     <a class="nav-item nav-link" href="{% url 'reservation-create' %}">Buchen</a>
                     <a class="nav-item nav-link" href="{% url 'select-court' %}">Platz Buchen</a>
-                    <a class="nav-item nav-link" href="#">Meine Buchungen</a>
+                    <a class="nav-item nav-link" href="{% url 'reservations-own' %}">Meine Buchungen</a>
                     <a class="nav-item nav-link" href="{% url 'logout' %}">Ausloggen</a>
                     {% else %}
                     <a class="nav-item nav-link" href="{% url 'login' %}">Einloggen</a>

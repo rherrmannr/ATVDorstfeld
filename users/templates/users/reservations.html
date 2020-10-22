@@ -1,14 +1,12 @@
 {% extends "courts/base.html" %}
 {% block content %}
-{% for court in courts %}
-<h1>{{ court.title }}</h1>
+<h1 class="mb-3">Meine Buchungen</h1>
+{% for reservation in reservations %}
 <article class="media content-section">
     <div class="media-body">
-        {% for reservation in reservations %}
-        {% if reservation.court_id == court.id %}
-        <p class="article-content">{{reservation.start_datetime|date:"F d, Y H:i"}} bis {{reservation.end_datetime|date:"H:i"}} Uhr von {{ reservation.author }}</p>
-        {% endif %}
-        {% endfor %}
+        <div class="article-metadata">
+            <small class="text-muted">{{reservation.start_datetime|date:"F d, Y H:i"}} bis {{reservation.end_datetime|date:"H:i"}}</small>
+        </div>
     </div>
 </article>
 {% endfor %}
