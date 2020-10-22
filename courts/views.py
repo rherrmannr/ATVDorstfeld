@@ -1,8 +1,9 @@
 import datetime
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, DeleteView
 
 from courts.forms import ReservationCreateView, CourtSelectionView, get_date_time_selection_view_class
 from courts.model import Court, Reservation
@@ -20,6 +21,20 @@ class CourtsListView(ListView):
             'reservations': Reservation.objects.all(),
         })
         return context
+
+
+class ReservationsListView(ListView):
+    model = Reservation
+    template_name = "courts/reservations.html"
+    context_object_name = 'reservations'
+
+
+class ReservationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Reservation
+    success_url = '/'
+
+    def test_func(self):
+        return self.request.user == self.get_object().author
 
 
 def select_court(request):
