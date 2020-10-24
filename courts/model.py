@@ -21,6 +21,7 @@ class Reservation(models.Model):
     player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="player2", null=True, blank=True)
     player3 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="player3", null=True, blank=True)
     player4 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="player4", null=True, blank=True)
+    contact_details = models.TextField(blank=True)
 
     def __str__(self):
         return str(self.author) if self.author else ''

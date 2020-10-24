@@ -51,8 +51,10 @@ def select_datetime(request):
     datetime_selection_view_class = get_date_time_selection_view_class(court=request.session['temp_data'])
     form = datetime_selection_view_class(request.POST)
     if request.method == 'POST':
-        print("calling is valid")
         if form.is_valid():
+            if is_using_guest(form) and not has_added_contact_details(form):
+                messages.warning(request, f'Bitte die Kontaktdaten für den Gastspieler angeben!')
+                return render(request, 'courts/reservation_form.html', {'form': form})
             form.instance.court_id = request.session['temp_data']
             form.instance.author = request.user
             form.instance.end_datetime = form.instance.start_datetime + datetime.timedelta(hours=1)
@@ -61,6 +63,28 @@ def select_datetime(request):
             form.save()
             return redirect('courts-home')
     return render(request, 'courts/reservation_form.html', {'form': form})
+
+
+def is_using_guest(form):
+    using_guest = False
+    guest_player = "Gastspieler"
+    if hasattr(form.instance.player1, 'username'):
+        if form.instance.player1.username == guest_player:
+            using_guest = True
+    if hasattr(form.instance.player2, 'username'):
+        if form.instance.player2.username == guest_player:
+            using_guest = True
+    if hasattr(form.instance.player3, 'username'):
+        if form.instance.player3.username == guest_player:
+            using_guest = True
+    if hasattr(form.instance.player4, 'username'):
+        if form.instance.player4.username == guest_player:
+            using_guest = True
+    return using_guest
+
+
+def has_added_contact_details(form):
+    return form.instance.contact_details
 
 
 def reserve(request):

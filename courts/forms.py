@@ -60,6 +60,7 @@ def get_date_time_selection_view_class(court):
             fields = ['start_datetime', 'player1', 'player2']
             if Court.objects.get(pk=court).double_field:
                 fields.extend(["player3", "player4"])
+            fields.extend(["contact_details"])
             model = Reservation
             choices = get_available_times_for_court(court)
             widgets = {'start_datetime': forms.Select(choices=choices)}
