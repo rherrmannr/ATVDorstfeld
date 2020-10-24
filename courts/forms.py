@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 
 from django import forms
+from django.forms import ModelForm
 
-from courts.model import Reservation
+from courts.model import Reservation, Court
 
 
 def get_all_choices(future_days=14):
@@ -54,10 +55,12 @@ def get_available_times_for_court(court_id, days_in_future=14):
 
 
 def get_date_time_selection_view_class(court):
-    class DatetimeSelectionView(forms.ModelForm):
+    class DatetimeSelectionView(ModelForm):
         class Meta:
+            fields = ['start_datetime', 'player1', 'player2']
+            if Court.objects.get(pk=court).double_field:
+                fields.extend(["player3", "player4"])
             model = Reservation
-            fields = ['start_datetime']
             choices = get_available_times_for_court(court)
             widgets = {'start_datetime': forms.Select(choices=choices)}
 

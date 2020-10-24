@@ -1,8 +1,5 @@
-import datetime
-
-from django.db import models
 from django.contrib.auth.models import User
-from django.urls import reverse
+from django.db import models
 
 
 class Court(models.Model):
@@ -20,6 +17,10 @@ class Reservation(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
+    player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="player1", null=True, default=author)
+    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="player2", null=True, blank=True)
+    player3 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="player3", null=True, blank=True)
+    player4 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="player4", null=True, blank=True)
 
     def __str__(self):
         return str(self.author) if self.author else ''

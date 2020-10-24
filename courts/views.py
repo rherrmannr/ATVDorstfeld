@@ -48,12 +48,15 @@ def select_court(request):
 
 
 def select_datetime(request):
-    form = get_date_time_selection_view_class(court=request.session['temp_data'])(request.POST)
+    datetime_selection_view_class = get_date_time_selection_view_class(court=request.session['temp_data'])
+    form = datetime_selection_view_class(request.POST)
     if request.method == 'POST':
+        print("calling is valid")
         if form.is_valid():
             form.instance.court_id = request.session['temp_data']
             form.instance.author = request.user
             form.instance.end_datetime = form.instance.start_datetime + datetime.timedelta(hours=1)
+
             messages.success(request, f'Buchung wurde angelegt. Viel Spaß beim Spielen!')
             form.save()
             return redirect('courts-home')

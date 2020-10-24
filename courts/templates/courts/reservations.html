@@ -23,24 +23,34 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    {% if reservation.player1 is not None %}
                         <th scope="row">1</th>
-                        <td>Robin</td>
-                        <td>Herrmann</td>
-                        <td>rherrmann</td>
+                        <td>TBD</td>
+                        <td>TBD</td>
+                        <td>{{ reservation.player1.username }}</td>
                     </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Alexander</td>
-                        <td>Lenz</td>
-                        <td>alex</td>
+                    {% endif %}
+                    {% if reservation.player2 is not None %}
+                        <th scope="row">1</th>
+                        <td>TBD</td>
+                        <td>TBD</td>
+                        <td>{{ reservation.player2.username }}</td>
                     </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Irgend</td>
-                        <td>Jemand</td>
-                        <td>Gastspieler</td>
+                    {% endif %}
+                    {% if reservation.player3 is not None %}
+                        <th scope="row">1</th>
+                        <td>TBD</td>
+                        <td>TBD</td>
+                        <td>{{ reservation.player3.username }}</td>
                     </tr>
+                    {% endif %}
+                    {% if reservation.player4 is not None %}
+                        <th scope="row">1</th>
+                        <td>TBD</td>
+                        <td>TBD</td>
+                        <td>{{ reservation.player4.username }}</td>
+                    </tr>
+                    {% endif %}
                     </tbody>
                 </table>
                 </p>
